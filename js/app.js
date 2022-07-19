@@ -76,15 +76,16 @@ dealCards();
 //PICK CARD
 //*********
 
-console.log(playersArray[1])
 //PLAY
 function play(){
+ //TEMPORARY**
   playerChoice = {
         cardSuit: "H",
         cardValue: "A",
         playedBy: 1,
         playable: true
       };
+  //TEMPORARY**
   if(playerChoice.playable != true){
     alert(`You must choose a card from Player${playerTurn}'s hand`)
     playerChoice = []
