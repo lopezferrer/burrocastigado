@@ -17,7 +17,9 @@ function createDeck() {
     for (value in values){
       let card = {
         cardSuit: suits[suit],
-        cardValue: values[value]
+        cardValue: values[value],
+        playedBy: "House",
+        playable: false
       };
 			deck.push(card);
     }
@@ -55,26 +57,61 @@ createPlayers();
 function dealCards(){
   for(i = 0; i < 5; i++){
     for(player in playersArray){
-      playersArray[player].hand.push(deck[Math.floor(Math.random() * (deck.length)) + 1])
+      deck[i].playedBy = parseInt(player) + 1
+      playersArray[player].hand.push(deck[i])
       deck.shift()
     }
   }
   //FIRST CARD
-  centerPile = deck.splice(0,1)
+  centerPile = [deck.shift()]
+  centerPile[0].playedBy = "House"
+
+  //MAKE ONLY PLAYER ONE'S CARDS PLAYABLE
+  for(i = 0; i <= playersArray[0].hand.length - 1; i++){
+    playersArray[0].hand[i].playable = true
+  }
 }
 dealCards();
 
+//PICK CARD
+//*********
+
+console.log(playersArray[1])
 //PLAY
 function play(){
-  playerChoice = playersArray[0].hand[0];
-  console.log(centerPile);
-  console.log(playerChoice);
-  if(playerChoice.cardSuit != centerPile.cardSuit){
-    alert("You must choose a card of the same suit")
+  playerChoice = {
+        cardSuit: "H",
+        cardValue: "A",
+        playedBy: 1,
+        playable: true
+      };
+  if(playerChoice.playable != true){
+    alert(`You must choose a card from Player${playerTurn}'s hand`)
     playerChoice = []
-  }else if(playerChoice.cardSuit === centerPile.cardSuit){
+  }else if(playerChoice.playable === true && playerChoice.cardSuit != centerPile[0].cardSuit){
+    //alert("You must choose a card of the same suit")
+    playerChoice = []
+  }else if(playerChoice.playable === true && playerChoice.cardSuit === centerPile[0].cardSuit){
+    playerChoice.playable = false
     centerPile.unshift(playerChoice);
     playerChoice = []
+    for(i = 0; i <= playersArray[playerTurn - 1].hand.length - 1; i++){
+        playersArray[playerTurn - 1].hand[i].playable = false
+      }
+    if(playerTurn <= numberOfPlayers){
+      playerTurn += 1;
+      for(i = 0; i <= playersArray[playerTurn - 1].hand.length - 1; i++){
+        playersArray[playerTurn - 1].hand[i].playable = true
+      }
+    }else{
+      playerTurn = 1
+      for(i = 0; i <= playersArray[0].hand.length - 1; i++){
+        playersArray[playerTurn - 1].hand[i].playable = true
+      }
+    }
+    for(i = 0; i < centerPile.length; i++){
+        centerPile[i].playable = false
+    }
   }
 }
 play()
