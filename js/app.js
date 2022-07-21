@@ -13,8 +13,8 @@ let centerPile = [];
 
 //COMBINE suits and values to create deck array
 function createDeck() {
-  for (suit in suits){
-    for (value in values){
+  for (let suit in suits){
+    for (let value in values){
       let card = {
         cardSuit: suits[suit],
         cardValue: values[value],
@@ -34,12 +34,12 @@ function createDeck() {
     deck[j] = temp;
    }
 }
-createDeck();
+
 
 //GENERATE PLAYERS
 class CardPlayers {
   constructor(playerNumber) {
-    this.playerNumber = parseInt(playerNumber)
+    this.playerNumber = parseInt(playerNumber);
     //this.playerName = //prompt("Enter player's name","Enter player's name")
     this.hand = [];
   }
@@ -51,27 +51,26 @@ function createPlayers(){
     playersArray.push(player);
   }
 }
-createPlayers();
+
 
 //DEAL CARDS
 function dealCards(){
   for(i = 0; i < 5; i++){
-    for(player in playersArray){
-      deck[i].playedBy = parseInt(player) + 1
-      playersArray[player].hand.push(deck[i])
-      deck.shift()
+    for(let player in playersArray){
+      deck[i].playedBy = parseInt(player) + 1;
+      playersArray[player].hand.push(deck[i]);
+      deck.shift();
     }
   }
   //FIRST CARD
-  centerPile = [deck.shift()]
-  centerPile[0].playedBy = "House"
+  centerPile = [deck.shift()];
+  centerPile[0].playedBy = "House";
 
   //MAKE ONLY PLAYER ONE'S CARDS PLAYABLE
   for(i = 0; i <= playersArray[0].hand.length - 1; i++){
-    playersArray[0].hand[i].playable = true
+    playersArray[0].hand[i].playable = true;
   }
 }
-dealCards();
 
 //PICK CARD
 //*********
@@ -87,32 +86,77 @@ function play(){
       };
   //TEMPORARY**
   if(playerChoice.playable != true){
-    alert(`You must choose a card from Player${playerTurn}'s hand`)
-    playerChoice = []
+    alert(`You must choose a card from Player${playerTurn}'s hand`);
+    playerChoice = [];
   }else if(playerChoice.playable === true && playerChoice.cardSuit != centerPile[0].cardSuit){
     //alert("You must choose a card of the same suit")
-    playerChoice = []
+    playerChoice = [];
   }else if(playerChoice.playable === true && playerChoice.cardSuit === centerPile[0].cardSuit){
-    playerChoice.playable = false
+    playerChoice.playable = false;
     centerPile.unshift(playerChoice);
-    playerChoice = []
+    playerChoice = [];
     for(i = 0; i <= playersArray[playerTurn - 1].hand.length - 1; i++){
-        playersArray[playerTurn - 1].hand[i].playable = false
+        playersArray[playerTurn - 1].hand[i].playable = false;
       }
     if(playerTurn <= numberOfPlayers){
       playerTurn += 1;
       for(i = 0; i <= playersArray[playerTurn - 1].hand.length - 1; i++){
-        playersArray[playerTurn - 1].hand[i].playable = true
+        playersArray[playerTurn - 1].hand[i].playable = true;
       }
     }else{
-      playerTurn = 1
+      playerTurn = 1;
       for(i = 0; i <= playersArray[0].hand.length - 1; i++){
-        playersArray[playerTurn - 1].hand[i].playable = true
+        playersArray[playerTurn - 1].hand[i].playable = true;
       }
     }
     for(i = 0; i < centerPile.length; i++){
-        centerPile[i].playable = false
+        centerPile[i].playable = false;
     }
   }
 }
-play()
+
+/*
+function finishRound(){
+  if(centerPile[0] >= centerPile[1]){
+    playersArray[centerPile[0].playedBy].push(centerPile[0])
+  }else{
+    playersArray[centerPile[0].playedBy].push(centerPile[1])
+  }
+  for(player in playersArray){
+    if(player.hand === []) {
+      console.log(`Player ${player.playerNumber} won this game!`)
+    }
+  }
+}
+*/
+//finishRound()
+
+function game(){
+  createDeck(); //creates and shuffles the deck of cards (I'll have to assign to filenames later to link them with the visuals)
+  console.log(deck.length);
+  console.log(deck[12]);
+  createPlayers();
+  //console.log(playersArray)
+  dealCards(); //this include the first card in the center of the table
+  //console.log(playersArray[0])
+  //playerOne choses card********
+  play();
+  //player 2 choses card**********
+  play();
+  //Scoring
+}
+game();
+
+
+//ANIMATIONS/CHANGES/TRANSITIONS
+function howToPlay() {
+  alert("The game is for two players.\nIt starts with five cards being dealt to each player.\nThe goal is to run out of cards at the end.\n\nTo open the game, a card is placed face up.\nEach player throws one card of the same suit\n(if you don't have one, you must draw from\nthe deck until you get one), looking for \nthe biggest card and win that hand, which \ngives you the right to throw first in the \nsecond hand and establish the suit in which\neveryone must play in the next round. As the\nhands go by, the player who manages to run out\nof cards wins.")
+}
+
+function uncover(){
+  document.getElementById("deck1").src = 'images/cards/7H.png';
+  let cardName = document.getElementById("deck1").src.replace(/^.*[\\\/]/, '');
+  cardName = cardName.split('.').slice(0,-1).join('.')
+  document.getElementById("deck1").setAttribute("alt", cardName);
+  document.getElementById("deck1").style.cursor = "grab";
+}

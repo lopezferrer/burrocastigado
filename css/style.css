@@ -2,8 +2,43 @@ body {
   background-color: black;
 }
 
+#header {
+  color: white;
+  width: 94%;
+  min-width: 400px;
+  height: 70px;
+  margin-left: 2.5%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-family: Arial;
+}
+
+#scores{
+  width: 400px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#how-to:hover{
+  color: yellow;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+#how-to:active{
+  color: red;
+  text-decoration: underline;
+}
+
 #play-area {
   position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   background-color: green;
   height: 85%;
   width: 93.5%;
@@ -13,16 +48,22 @@ body {
   margin-bottom: 2.5%;
 }
 
+.card-format{
+  background-color: white;
+  width: 120px;
+  height: 168px;
+  border-radius: 7px;
+}
+
 #deck-container{
   position: absolute;
-  top: 0;
   right: 4%;
   top: 36.66%;
   background-color: white;
   width: 120px;
   height: 168px;
-  border: 1px solid black;
-  border-radius: 12.5px;
+  border: 0.5px solid black;
+  border-radius: 7px;
   box-shadow:
     2px 2px 0.5px #eee,
     3px 3px 0.5px black,
@@ -30,71 +71,43 @@ body {
     6px 6px 0.5px black,
     8px 8px 0.5px #eee,
     9px 9px 0.5px black;
-  cursor: grab;
-}
-
-#deck-container: hover{
-  position: absolute;
-}
-
-#deck-top-card-rear{
-  color: red;
   visibility: visible;
 }
 
-.ga-logo{
+.card-container{
+  display: flex;
   position: absolute;
-  width: 60%;
-  top: 29%;
+  width: 50%;
+  height: 180px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  border: 2px solid black;
+  border-radius: 7px;
+  padding: 0 2% 0 2%;
+}
+
+#player1-container{
+  top: 4%;
+  left: 20%;
+}
+#player2-container{
+  bottom: 4%;
   left: 20%;
 }
 
-#deck-top-card-front{
-  color: red;
-  visibility: hidden;
+#center-container{
+  width: 40%;
+  left: 25%;
 }
 
-#deck-top-card-symbol-container {
-  display: flex;
-  background-color: white;
+#deck1{
   position: absolute;
-  height: 60%;
-  width: 75%;
-  top: 20%;
-  left: 12.5%;
-  font-size: 65px;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
+  right: 1%;
+  top: -0.5%;
+  cursor: pointer;
 }
 
-#deck-top-card-top {
-  position: absolute;
-  top: 10px;
-  left: 20px;
-  width: 35px;
-  height: 35px;
-}
-
-#deck-top-card-value-container-bottom {
-  position: absolute;
-  transform: rotate(180deg);
-  bottom: 10px;
-  right: 20px;
-  width: 35px;
-  height: 35px;
-}
-
-#deck-top-card-value-number, #deck-top-card-value-suit{
-  font-size: 30px;
-  font-family: Times New Roman;
-}
-#deck-top-card-value-number{
-  position: absolute;
-  left: 0px;
-}
-
-#deck-top-card-value-suit{
-  position: absolute;
-  right: 0px;
+#center1{
+  visibility: visible;
 }

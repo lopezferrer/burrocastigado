@@ -4,34 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Burro castigado</title>
+    <title>Burro Castigado</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
   </head>
   <body>
-    <h1>Burro Castigado</h1>
-  <section id="play-area">
-    <div id="deck-container">
-      <div id="deck-top-card-rear">
-        <img src="images/ga-logo.png" style="text-align:center" alt="GA Logo" class="ga-logo">
+    <section id="header">
+      <h1>BURRO</h1>
+      <div id="scores">
+        <h2>Scores</h2>
+        <h3>Player 1:</h3>
+        <p id="score1">0</p>
+        <h3>Player 2:</h3>
+        <p id="score2">0</p>
+        </div>
+      <div id="how-to" onClick="howToPlay()">
+        <h3>How to play</h3>
+        </div>
+    </section>
+    <section id="play-area">
+      <div id="deck-container">
+        <img src="images/cards/ga-card.png" class="card-format" alt="GA Logo" id="deck">
+        <img src="images/cards/ga-card.png" class="card-format" id="deck1" alt="GA Logo" onclick="uncover()">
       </div>
-      <div id="deck-top-card-front">
-        <div id="deck-top-card-symbol-container">&#9829
-        </div>
-        <div id="deck-top-card-top">
-          <div id="deck-top-card-value-suit">&#9829
-          </div>
-          <div id="deck-top-card-value-number">7
-          </div>
-        </div>
-        <div id="deck-top-card-value-container-bottom">
-          <div id="deck-top-card-value-suit">&#9829
-          </div>
-          <div id="deck-top-card-value-number">7
-          </div>
-        </div>
-     </div>
-    </div>
-  </section>
-	<script src="js/app.js"></script>
-  </body>
-</html>
+      <div class="card-container" id="center-container">
+        <img src="images/cards/ga-card.png" class="card-format" id="center-1" alt="GA Logo">
+      </div>
+      <div class="card-container" id="player1-container">
+        <img src="images/cards/ga-card.png" class="card-format" id="player1-1" alt="GA Logo">
+      </div>
+      <div class="card-container" id="player2-container">
+        <img src="images/cards/ga-card.png" class="card-format" id="player2-1" alt="GA Logo">
+      </div>
+    </section>
+<script src="js/app.js"></script>
+</body>
