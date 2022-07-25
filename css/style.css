@@ -77,36 +77,41 @@ body {
 .card-container{
   display: flex;
   position: absolute;
-  width: 50%;
+  text-align: center;
+  left: 2%;
+  width: 92%;
   height: 180px;
   flex-direction: row;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
+  align-content: center;
   border: 2px solid black;
   border-radius: 7px;
   padding: 0 2% 0 2%;
+  gap: 0.5%;
+}
+
+#player2-container{
+  top: 4%;
 }
 
 #player1-container{
-  top: 4%;
-  left: 20%;
-}
-#player2-container{
   bottom: 4%;
-  left: 20%;
 }
 
 #center-container{
-  width: 40%;
-  left: 25%;
+  width: 50%;
+  left: 22.5%;
 }
 
+/*
 #deck1{
   position: absolute;
   right: 1%;
   top: -0.5%;
-  cursor: pointer;
+  cursor: grab;
 }
+*/
 
 #center1{
   visibility: visible;

@@ -11,6 +11,8 @@ let playerTurn = 1;
 let playerChoice = {};
 let centerPile = [];
 
+let deckContainer = document.getElementById("deck-container");
+
 //COMBINE suits and values to create deck array
 function createDeck() {
   for (let suit in suits){
@@ -19,7 +21,9 @@ function createDeck() {
         cardSuit: suits[suit],
         cardValue: values[value],
         playedBy: "House",
-        playable: false
+        playable: false,
+        front: "images/cards/" + (values[value]+suits[suit]).replace(/[^a-z0-9]/gi, '_')+".png",
+        rear: "images/cards/ga-card.png",
       };
 			deck.push(card);
     }
@@ -42,6 +46,7 @@ class CardPlayers {
     this.playerNumber = parseInt(playerNumber);
     //this.playerName = //prompt("Enter player's name","Enter player's name")
     this.hand = [];
+    this.score = 0;
   }
 }
 function createPlayers(){
@@ -52,25 +57,73 @@ function createPlayers(){
   }
 }
 
-
 //DEAL CARDS
 function dealCards(){
+  let playerContainer = "";
+  let newElement = "";
+  let cardImage = "";
+  let cardId = ""
   for(i = 0; i < 5; i++){
     for(let player in playersArray){
-      deck[i].playedBy = parseInt(player) + 1;
-      playersArray[player].hand.push(deck[i]);
-      deck.shift();
+      deck[0].playedBy = parseInt(player) + 1;
+      playersArray[player].hand.unshift(deck.shift(0));
+      cardImage = String(playersArray[player].hand[0].rear);
+      cardId = String("player" + (parseInt(player) + 1) + "-" + (i));
+      playerContainer = String("player" + playersArray[player].playerNumber + "-container")
+      newElement = document.createElement('img');
+      newElement.setAttribute('src', cardImage);
+      newElement.setAttribute('id', cardId);
+      newElement.setAttribute('class', 'card-format');
+      playerContainer = document.getElementById(playerContainer);
+      playerContainer.appendChild(newElement);
     }
   }
+
+  playerContainer = String("player" + playersArray[playerTurn - 1].playerNumber + "-container")
+  document.getElementById(playerContainer).style.border = "6px solid black";
+
   //FIRST CARD
   centerPile = [deck.shift()];
   centerPile[0].playedBy = "House";
-
+  document.getElementById("center-1").src = centerPile[0].front
   //MAKE ONLY PLAYER ONE'S CARDS PLAYABLE
+  let takeCard = ""
   for(i = 0; i <= playersArray[0].hand.length - 1; i++){
     playersArray[0].hand[i].playable = true;
+    cardId = String("player1-" + (i));
+    takeCard = document.getElementById(cardId);
+    cardImage = String(playersArray[0].hand[i].front);
+    takeCard.setAttribute('src', cardImage);
+    playerTurn = 1;
   }
 }
+
+
+function uncover(){
+  if(deck.length === 0){
+    alert("No cards left in the pile");
+  }else{
+    //cardName = String(document.getElementById("deck").src.replace(/^.*[\\\/]/, ''));
+    //cardName = cardName.split('.').slice(0,-1).join('.');
+    // move to player's hand
+    playersArray[playerTurn-1].hand.playedBy = playerTurn
+    playersArray[playerTurn-1].hand.unshift(deck.shift(0));
+    if(deck.length === 0){
+      document.getElementById("deck-container").remove()
+    }
+    cardImage = String(playersArray[playerTurn-1].hand[0].front);
+    console.log(playersArray[playerTurn-1].hand[0].front);
+    cardId = String("player" + playerTurn + "-" + (playersArray[playerTurn-1].hand.length -1));
+    playerContainer = String("player" + playerTurn + "-container");
+    newElement = document.createElement('img');
+    newElement.setAttribute('src', cardImage);
+    newElement.setAttribute('id', cardId);
+    newElement.setAttribute('class', 'card-format');
+    playerContainer = document.getElementById(playerContainer);
+    playerContainer.appendChild(newElement);
+  }
+}
+
 
 //PICK CARD
 //*********
@@ -133,8 +186,6 @@ function finishRound(){
 
 function game(){
   createDeck(); //creates and shuffles the deck of cards (I'll have to assign to filenames later to link them with the visuals)
-  console.log(deck.length);
-  console.log(deck[12]);
   createPlayers();
   //console.log(playersArray)
   dealCards(); //this include the first card in the center of the table
@@ -151,12 +202,4 @@ game();
 //ANIMATIONS/CHANGES/TRANSITIONS
 function howToPlay() {
   alert("The game is for two players.\nIt starts with five cards being dealt to each player.\nThe goal is to run out of cards at the end.\n\nTo open the game, a card is placed face up.\nEach player throws one card of the same suit\n(if you don't have one, you must draw from\nthe deck until you get one), looking for \nthe biggest card and win that hand, which \ngives you the right to throw first in the \nsecond hand and establish the suit in which\neveryone must play in the next round. As the\nhands go by, the player who manages to run out\nof cards wins.")
-}
-
-function uncover(){
-  document.getElementById("deck1").src = 'images/cards/7H.png';
-  let cardName = document.getElementById("deck1").src.replace(/^.*[\\\/]/, '');
-  cardName = cardName.split('.').slice(0,-1).join('.')
-  document.getElementById("deck1").setAttribute("alt", cardName);
-  document.getElementById("deck1").style.cursor = "grab";
 }
