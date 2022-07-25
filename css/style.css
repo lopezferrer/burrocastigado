@@ -80,7 +80,7 @@ body {
   text-align: center;
   left: 2%;
   width: 92%;
-  height: 180px;
+  height: 190px;
   flex-direction: row;
   align-items: center;
   justify-content: center;
@@ -89,29 +89,23 @@ body {
   border-radius: 7px;
   padding: 0 2% 0 2%;
   gap: 0.5%;
+  overflow: auto;
+  padding-bottom: 8px;
 }
 
 #player2-container{
-  top: 4%;
+  top: 3%;
 }
 
 #player1-container{
-  bottom: 4%;
+  bottom: 3%;
 }
 
 #center-container{
   width: 50%;
   left: 22.5%;
+  height: 180px;
 }
-
-/*
-#deck1{
-  position: absolute;
-  right: 1%;
-  top: -0.5%;
-  cursor: grab;
-}
-*/
 
 #center1{
   visibility: visible;

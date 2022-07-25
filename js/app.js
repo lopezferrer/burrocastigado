@@ -20,10 +20,12 @@ function createDeck() {
       let card = {
         cardSuit: suits[suit],
         cardValue: values[value],
+        id: "",
         playedBy: "House",
         playable: false,
         front: "images/cards/" + (values[value]+suits[suit]).replace(/[^a-z0-9]/gi, '_')+".png",
         rear: "images/cards/ga-card.png",
+        selected: false,
       };
 			deck.push(card);
     }
@@ -38,7 +40,6 @@ function createDeck() {
     deck[j] = temp;
    }
 }
-
 
 //GENERATE PLAYERS
 class CardPlayers {
@@ -63,22 +64,26 @@ function dealCards(){
   let newElement = "";
   let cardImage = "";
   let cardId = ""
+  let cardClass = ""
   for(i = 0; i < 5; i++){
     for(let player in playersArray){
+      cardId = String("player" + (parseInt(player) + 1) + "-card" + (i));
+      deck[0].id = String("player" + (parseInt(player) + 1) + "-card" + (4-i));
       deck[0].playedBy = parseInt(player) + 1;
       playersArray[player].hand.unshift(deck.shift(0));
       cardImage = String(playersArray[player].hand[0].rear);
-      cardId = String("player" + (parseInt(player) + 1) + "-" + (i));
+      cardClass = String("player" + (parseInt(player) + 1) + "-cards");
       playerContainer = String("player" + playersArray[player].playerNumber + "-container")
       newElement = document.createElement('img');
       newElement.setAttribute('src', cardImage);
       newElement.setAttribute('id', cardId);
       newElement.setAttribute('class', 'card-format');
+      newElement.classList.add(cardClass);
       playerContainer = document.getElementById(playerContainer);
       playerContainer.appendChild(newElement);
     }
+    document.getElementById("deck-container").style.cursor = "grab"
   }
-
   playerContainer = String("player" + playersArray[playerTurn - 1].playerNumber + "-container")
   document.getElementById(playerContainer).style.border = "6px solid black";
 
@@ -88,56 +93,71 @@ function dealCards(){
   document.getElementById("center-1").src = centerPile[0].front
   //MAKE ONLY PLAYER ONE'S CARDS PLAYABLE
   let takeCard = ""
-  for(i = 0; i <= playersArray[0].hand.length - 1; i++){
-    playersArray[0].hand[i].playable = true;
-    cardId = String("player1-" + (i));
+  for(i = 0; i <= playersArray[playerTurn-1].hand.length - 1; i++){
+    playersArray[playerTurn - 1].hand[i].playable = true;
+    cardId = String("player" + playerTurn + "-card" + (i));
     takeCard = document.getElementById(cardId);
-    cardImage = String(playersArray[0].hand[i].front);
+    cardImage = String(playersArray[playerTurn].hand[i].front);
     takeCard.setAttribute('src', cardImage);
+    takeCard.style.cursor = "grab";
     playerTurn = 1;
   }
 }
 
+//-----------
+//PICK CARD
+function pickCard(){
+  let cards = document.querySelectorAll("." + "player" + playerTurn + "-" + "cards");
+  for (i of cards) {
+    i.addEventListener('click', function() {
+      cardPicked = this.id;
+      function pickId(card){
+        return card.id === cardPicked
+      }
+      playersHand = playersArray[playerTurn - 1].hand
+      playerChoice = playersHand.find(pickId);
+      console.log(playerChoice)
+    });
+  }
+}
 
+//----------------
 function uncover(){
   if(deck.length === 0){
     alert("No cards left in the pile");
   }else{
-    //cardName = String(document.getElementById("deck").src.replace(/^.*[\\\/]/, ''));
-    //cardName = cardName.split('.').slice(0,-1).join('.');
     // move to player's hand
-    playersArray[playerTurn-1].hand.playedBy = playerTurn
+    playersArray[playerTurn-1].hand.playedBy = playerTurn;
     playersArray[playerTurn-1].hand.unshift(deck.shift(0));
-    if(deck.length === 0){
-      document.getElementById("deck-container").remove()
-    }
     cardImage = String(playersArray[playerTurn-1].hand[0].front);
-    console.log(playersArray[playerTurn-1].hand[0].front);
-    cardId = String("player" + playerTurn + "-" + (playersArray[playerTurn-1].hand.length -1));
+    cardId = String("player" + playerTurn + "-card" + (playersArray[playerTurn-1].hand.length - 1));
+    playersArray[playerTurn-1].hand[0].id = cardId;
     playerContainer = String("player" + playerTurn + "-container");
+    cardClass = String("player" + playerTurn + "-cards");
     newElement = document.createElement('img');
     newElement.setAttribute('src', cardImage);
     newElement.setAttribute('id', cardId);
     newElement.setAttribute('class', 'card-format');
     playerContainer = document.getElementById(playerContainer);
     playerContainer.appendChild(newElement);
+    newElement.classList.add(cardClass);
+    newElement.style.cursor = "grab";
+    if(deck.length === 3){
+      document.getElementById("deck-container").style.boxShadow = "2px 2px 0.5px #eee, 3px 3px 0.5px black,5px 5px 0.5px #eee,6px 6px 0.5px black";
+    }else if(deck.length === 2){
+      document.getElementById("deck-container").style.boxShadow = "2px 2px 0.5px #eee, 3px 3px 0.5px black";
+    }else if(deck.length === 1){
+      document.getElementById("deck-container").style.boxShadow = "none"
+    }else if(deck.length === 0){
+      document.getElementById("deck-container").remove()
+    }
   }
+  //pickCard()
 }
 
-
-//PICK CARD
-//*********
-
+/*
 //PLAY
 function play(){
- //TEMPORARY**
-  playerChoice = {
-        cardSuit: "H",
-        cardValue: "A",
-        playedBy: 1,
-        playable: true
-      };
-  //TEMPORARY**
   if(playerChoice.playable != true){
     alert(`You must choose a card from Player${playerTurn}'s hand`);
     playerChoice = [];
@@ -167,7 +187,7 @@ function play(){
     }
   }
 }
-
+*/
 /*
 function finishRound(){
   if(centerPile[0] >= centerPile[1]){
@@ -187,17 +207,15 @@ function finishRound(){
 function game(){
   createDeck(); //creates and shuffles the deck of cards (I'll have to assign to filenames later to link them with the visuals)
   createPlayers();
-  //console.log(playersArray)
+  //console.log(playersArray[0].hand)
   dealCards(); //this include the first card in the center of the table
-  //console.log(playersArray[0])
-  //playerOne choses card********
-  play();
+  pickCard()
+  //console.log(playerChoice)
+  //play();
   //player 2 choses card**********
-  play();
   //Scoring
 }
 game();
-
 
 //ANIMATIONS/CHANGES/TRANSITIONS
 function howToPlay() {
