@@ -11,6 +11,8 @@ let playersArray = [];
 let playerTurn = 1;
 let playerChoice = {};
 let centerPile = [];
+let score1 = 0
+let score2 = 0
 //---------Create deck array----------//
 function createDeck() {
   for (let suit in suits){
@@ -116,21 +118,25 @@ function dealCards(){
 
 function verify(){
   if(centerPile.length <= 1){
+    setTimeout (function(){
       alert(`Pick your card, Player ${playerTurn}`);
+    }, 100)
   }else if(centerPile.length === 2){
     if(centerPile[0].realValue > centerPile[1].realValue){
       setTimeout(function() {
         alert(`Player ${centerPile[0].playedBy} wins!`);
-      }, 500);
+        score1 += 1
+        document.getElementById('score1').innerHTML = score1
+      }, 50);
       if(playersArray[centerPile[0].playedBy-1].hand.length === 0){
-        alert(`Player ${centerPile[0].playedBy} wins the game!`)
-      }else{
-        alert(`Pick your card, Player ${playerTurn}`)
+        alert(`Player ${centerPile[0].playedBy} wins the game!`);
+        score2 += 1
+        document.getElementById('score2').innerHTML = score2
       }
     }else if(centerPile[1].realValue > centerPile[0].realValue){
       setTimeout(function() {
         alert(`Player ${centerPile[0].playedBy} wins!`);
-      }, 500);
+      }, 50);
       if(playersArray[centerPile[1].playedBy-1].hand.length === 0){
         alert(`Player ${centerPile[1].playedBy} wins the game!`)
       }
@@ -171,12 +177,14 @@ function play(){
       }
       playerTurn = 1;
       playersHand = playersArray[playerTurn-1].hand;
-      for(let i = 0; i <= playersHand.length - 1; i++){
-        cardId = document.getElementById(playersHand[i].id);
-        cardImageFile = String(playersHand[i].front);
-        cardId.style.cursor = "grab";
-        cardId.setAttribute('src', cardImageFile);
-      }
+      setTimeout(function() {
+        for(let i = 0; i <= playersHand.length - 1; i++){
+          cardId = document.getElementById(playersHand[i].id);
+          cardImageFile = String(playersHand[i].front);
+          cardId.style.cursor = "grab";
+          cardId.setAttribute('src', cardImageFile);
+        }
+      },1000)
       playerContainer = String("player" + playersArray[playerTurn - 1].playerNumber + "-container")
       document.getElementById(playerContainer).style.border = "6px solid black";
     }else{
@@ -191,18 +199,19 @@ function play(){
       }
       playerTurn += 1;
       playersHand = playersArray[playerTurn-1].hand;
-      for(let i = 0; i <= playersHand.length - 1; i++){
-        cardId = document.getElementById(playersHand[i].id);
-        cardImageFile = String(playersHand[i].front);
-        cardId.style.cursor = "grab";
-        cardId.setAttribute('src', cardImageFile);
-      }
+      setTimeout(function() {
+        for(let i = 0; i <= playersHand.length - 1; i++){
+          cardId = document.getElementById(playersHand[i].id);
+          cardImageFile = String(playersHand[i].front);
+          cardId.style.cursor = "grab";
+          cardId.setAttribute('src', cardImageFile);
+        }
+      }, 1000)
       let cards = document.querySelectorAll("." + "player" + (playerTurn-1) + "-" + "cards");
       let cardPicked = "";
       playerContainer = String("player" + playersArray[playerTurn - 1].playerNumber + "-container")
       document.getElementById(playerContainer).style.border = "6px solid black";
     }
-
   }
 }
 
@@ -265,19 +274,15 @@ function uncover(){
       document.getElementById("deck-container").remove()
     }
   }
-
-  console.log(playersArray[playerTurn-1].hand)
 }
 
 function game(){
   createDeck();
   createPlayers();
   dealCards();
-
-  //setTimeout(function(){
-    //alert(`Pick your card, Player ${playerTurn}`);
-  //}, 500);
-
+  setTimeout(function(){
+    alert(`Pick your card, Player ${playerTurn}`);
+  }, 500);
   selectCard();
 }
 game();
