@@ -80,17 +80,19 @@ function dealCards(){
     document.getElementById("deck-container").style.cursor = "grab"
   }
 //-------FIRST CARD IN CENTER-----------//
+/*
   centerPile = [deck.shift()];
   centerPile[0].playedBy = "House";
   document.getElementById("center-1").src = centerPile[0].front;
+*/
 //-----MAKE ONLY PLAYER ONE'S CARDS PLAYABLE--------//
   let takeCard = ""
   for(i = 0; i <= playersArray[playerTurn-1].hand.length - 1; i++){
     playersArray[playerTurn - 1].hand[i].playable = true;
-    cardId = String("player" + playerTurn + "-card" + (i));
-    takeCard = document.getElementById(cardId);
-    cardImage = String(playersArray[playerTurn-1].hand[i].front);
-    takeCard.setAttribute('src', cardImage);
+    cardImageId = String("player" + playerTurn + "-card" + (i));
+    takeCard = document.getElementById(cardImageId);
+    cardImageFile = String(playersArray[playerTurn-1].hand[i].front);
+    takeCard.setAttribute('src', cardImageFile);
     takeCard.style.cursor = "grab";
   }
   playerContainer = String("player" + playersArray[playerTurn - 1].playerNumber + "-container")
@@ -98,14 +100,49 @@ function dealCards(){
 }
 //------PLAY LOGIC ------------------//
 function play() {
-  if(playerChoice.cardSuit === centerPile[0].cardSuit){
-    console.log(playerChoice)
-  }else{
-    console.log("Wrong!")
+  if(playerChoice === undefined){
+    alert(`It is Player-${playerTurn}'s turn!\nYou must choose a card from Player-${playerTurn}'s hand.`)
+    return
+  }else if(centerPile.length === 0 || playerChoice.cardSuit === centerPile[0].cardSuit){
+    cardIdString = String(playerChoice.id)
+    cardId = document.getElementById(playerChoice.id);
+    centerPile.unshift(playerChoice);
+    for(let i = 0; i <= playersArray[playerTurn-1].hand.length - 1; i++){
+      if(playersArray[playerTurn-1].hand[i].id === cardIdString){
+        playersArray[playerTurn-1].hand.splice(i,1)
+      }
+    }
+    console.log(playersArray[playerTurn - 1].hand)
+    cardId.setAttribute('id', centerPile[playerTurn]);
+    centerContainer = document.getElementById("center-container");
+    centerContainer.appendChild(cardId);
+    playerChoice.id = "centerPile" + "-card" + playerTurn
+    if(playerTurn === numberOfPlayers){
+      playerContainer = String("player" + playersArray[playerTurn - 1].playerNumber + "-container")
+      document.getElementById(playerContainer).style.border = "2px solid black";
+      let playersHand = playersArray[playerTurn-1].hand;
+      console.log(playersHand)
+      for(let i = 0; i <= playersHand.length - 1; i++){
+        cardId = document.getElementById(playersHand[i].id);
+        console.log(cardId)
+        cardImageFile = String(playersHand[i].rear);
+        cardId.style.cursor = "auto";
+        cardId.setAttribute('src', cardImageFile);
+      }
+      playerTurn = 1;
+      playerContainer = String("player" + playersArray[playerTurn - 1].playerNumber + "-container")
+      document.getElementById(playerContainer).style.border = "6px solid black";
+    }else{
+      player +=1;
+    }
+  }else if(centerPile.length >= 1 || playerChoice.cardSuit === centerPile[0].cardSuit){
+    alert("You must choose a card of the same suit")
   }
 }
+
 //------PICK CARD FROM HAND----------//
 function selectCard(){
+  playerChoice = {}
   let cards = document.querySelectorAll("." + "player" + playerTurn + "-" + "cards");
   let cardPicked = "";
   for (i of cards) {
@@ -119,7 +156,6 @@ function selectCard(){
     });
   }
 }
-
 //-----TAKE CARD FROM PILE-------//
 function uncover(){
   if(deck.length === 0){

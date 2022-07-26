@@ -6,7 +6,7 @@ body {
   color: white;
   width: 94%;
   min-width: 400px;
-  height: 70px;
+  height: 40px;
   margin-left: 2.5%;
   display: flex;
   flex-direction: row;
@@ -40,7 +40,7 @@ body {
   align-items: center;
   justify-content: space-between;
   background-color: green;
-  height: 85%;
+  height: 90%;
   width: 93.5%;
   margin-left: 2.5%;
   margin-right: 3.5%;
@@ -95,6 +95,7 @@ body {
 
 #center1{
   visibility: visible;
+  overflow: auto;
 }
 
 #player2-container{
