@@ -208,6 +208,7 @@ function verify(){
       targetArray.push(centerPile.splice(0,2))
       targetContainer.appendChild(centerCard1)
       targetContainer.appendChild(centerCard2)
+      console.log(playersArray[0])
       playerChoice = {}
       playerTurn = 1
       //-------
@@ -221,6 +222,7 @@ function verify(){
       }, 50);
       score1 += 1
       document.getElementById('score1').innerHTML = score1
+      
       if(playersArray[centerPile[1].playedBy-1].hand.length === 0){
         alert(`Player ${centerPile[1].playedBy} wins the game!`)
       }
