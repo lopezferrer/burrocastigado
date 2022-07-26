@@ -132,7 +132,8 @@ function play(){
         playersArray[playerTurn-1].hand.splice(i,1)
       }
     }
-    cardId.setAttribute('id', centerPile[playerTurn]);
+    newCardIdString = String(centerPile[playerTurn])
+    cardId.setAttribute('id', newCardIdString);
     centerContainer = document.getElementById("center-container");
     centerContainer.appendChild(cardId);
     playerChoice.id = "centerPile" + "-card" + playerTurn
@@ -196,18 +197,37 @@ function verify(){
     if(centerPile[0].realValue > centerPile[1].realValue){
       setTimeout(function() {
         alert(`Player ${centerPile[0].playedBy} wins!`);
-        score1 += 1
-        document.getElementById('score1').innerHTML = score1
       }, 50);
+      score2 += 1
+      document.getElementById('score2').innerHTML = score2
+      let loser = centerPile[1].playedBy
+      loserContainerString = String("player" + centerPile[1].playedBy + "-container")
+      let centerCard1 = document.getElementById(centerCard1String)
+      let centerCard2 = document.getElementById(centerCard2String)
+      let targetContainer = document.getElementById(loserContainerString)
+      console.log(targetContainer)
+      console.log(centerCard1)
+      targetContainer.appendChild(centerCard1)
+      targetContainer.appendChild(centerCard2)
+      let targetArray = playersArray[loser-1].hand
+      targetArray.push(centerPile.splice(0,2))
+      console.log(playersArray[loser-1].hand)
+      //-------
       if(playersArray[centerPile[0].playedBy-1].hand.length === 0){
         alert(`Player ${centerPile[0].playedBy} wins the game!`);
         score2 += 1
         document.getElementById('score2').innerHTML = score2
+        loser = centerPile[0].playedBy
+        destinationArray = playersArray[loser-1].hand
+        destinationArray.push(centerPile.splice(0,2))
       }
+      //----------
     }else if(centerPile[1].realValue > centerPile[0].realValue){
       setTimeout(function() {
-        alert(`Player ${centerPile[0].playedBy} wins!`);
+        alert(`Player ${centerPile[1].playedBy} wins!`);
       }, 50);
+      score1 += 1
+      document.getElementById('score1').innerHTML = score1
       if(playersArray[centerPile[1].playedBy-1].hand.length === 0){
         alert(`Player ${centerPile[1].playedBy} wins the game!`)
       }
@@ -257,6 +277,7 @@ function uncover(){
       }
       playerChoice = playersArray[playerTurn - 1].hand.find(pickId);
       play()
+      verify()
     });
     playerContainer = document.getElementById(playerContainer);
     playerContainer.appendChild(newElement);
