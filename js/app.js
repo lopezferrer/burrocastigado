@@ -116,34 +116,6 @@ function dealCards(){
 }
 //------PLAY LOGIC ------------------//
 
-function verify(){
-  if(centerPile.length <= 1){
-    setTimeout (function(){
-      alert(`Pick your card, Player ${playerTurn}`);
-    }, 100)
-  }else if(centerPile.length === 2){
-    if(centerPile[0].realValue > centerPile[1].realValue){
-      setTimeout(function() {
-        alert(`Player ${centerPile[0].playedBy} wins!`);
-        score1 += 1
-        document.getElementById('score1').innerHTML = score1
-      }, 50);
-      if(playersArray[centerPile[0].playedBy-1].hand.length === 0){
-        alert(`Player ${centerPile[0].playedBy} wins the game!`);
-        score2 += 1
-        document.getElementById('score2').innerHTML = score2
-      }
-    }else if(centerPile[1].realValue > centerPile[0].realValue){
-      setTimeout(function() {
-        alert(`Player ${centerPile[0].playedBy} wins!`);
-      }, 50);
-      if(playersArray[centerPile[1].playedBy-1].hand.length === 0){
-        alert(`Player ${centerPile[1].playedBy} wins the game!`)
-      }
-    }
-  }
-}
-
 function play(){
   if(centerPile.length < 2 && playerChoice === undefined){
     alert(`It is Player-${playerTurn}'s turn!\nYou must choose a card from Player-${playerTurn}'s hand.`)
@@ -215,6 +187,33 @@ function play(){
   }
 }
 
+function verify(){
+  if(centerPile.length <= 1){
+    setTimeout (function(){
+      alert(`Pick your card, Player ${playerTurn}`);
+    }, 100)
+  }else if(centerPile.length === 2){
+    if(centerPile[0].realValue > centerPile[1].realValue){
+      setTimeout(function() {
+        alert(`Player ${centerPile[0].playedBy} wins!`);
+        score1 += 1
+        document.getElementById('score1').innerHTML = score1
+      }, 50);
+      if(playersArray[centerPile[0].playedBy-1].hand.length === 0){
+        alert(`Player ${centerPile[0].playedBy} wins the game!`);
+        score2 += 1
+        document.getElementById('score2').innerHTML = score2
+      }
+    }else if(centerPile[1].realValue > centerPile[0].realValue){
+      setTimeout(function() {
+        alert(`Player ${centerPile[0].playedBy} wins!`);
+      }, 50);
+      if(playersArray[centerPile[1].playedBy-1].hand.length === 0){
+        alert(`Player ${centerPile[1].playedBy} wins the game!`)
+      }
+    }
+  }
+}
 //------PICK CARD FROM HAND----------//
 function selectCard(){
   playerChoice = {}
