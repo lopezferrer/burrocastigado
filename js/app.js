@@ -7,17 +7,16 @@ const deck = [];
 // INITIALIZE GAME ELEMENTS
 let numberOfPlayers = 2;
 let playersArray = [];
-let playerTurn = 1;
+let playerTurn = 2;
 let playerChoice = {};
 let centerPile = [];
-
 //---------Create deck array----------//
 function createDeck() {
   for (let suit in suits){
     for (let value in values){
       let card = {
-        cardSuit: suits[suit],
         cardValue: values[value],
+        cardSuit: suits[suit],
         id: "",
         playedBy: "House",
         playable: false,
@@ -38,7 +37,6 @@ function createDeck() {
     deck[j] = temp;
    }
 }
-
 //-------GENERATE PLAYERS----------
 class CardPlayers {
   constructor(playerNumber) {
@@ -48,7 +46,6 @@ class CardPlayers {
     this.score = 0;
   }
 }
-
 function createPlayers(){
   //numberOfPlayers = parseInt(prompt("Type number of players (1-10)"))
   for(i = 0; i < numberOfPlayers; i++){
@@ -56,7 +53,6 @@ function createPlayers(){
     playersArray.push(player);
   }
 }
-
 //-----------DEAL CARDS------------//
 function dealCards(){
   let playerContainer = "";
@@ -100,19 +96,26 @@ function dealCards(){
   playerContainer = String("player" + playersArray[playerTurn - 1].playerNumber + "-container")
   document.getElementById(playerContainer).style.border = "6px solid black";
 }
+//------PLAY LOGIC ------------------//
+function play() {
+  if(playerChoice.cardSuit === centerPile[0].cardSuit){
+    console.log(playerChoice)
+  }else{
+    console.log("Wrong!")
+  }
+}
 //------PICK CARD FROM HAND----------//
 function selectCard(){
   let cards = document.querySelectorAll("." + "player" + playerTurn + "-" + "cards");
-  let cardPicked =""
+  let cardPicked = "";
   for (i of cards) {
     i.addEventListener('click', function() {
       cardPicked = this.id;
       function pickId(card){
-        return card.id === cardPicked
+        return card.id === cardPicked;
       }
-      playersHand = playersArray[playerTurn - 1].hand
-      playerChoice = playersHand.find(pickId);
-      console.log(playerChoice);
+      playerChoice = playersArray[playerTurn - 1].hand.find(pickId);
+      play()
     });
   }
 }
@@ -128,12 +131,21 @@ function uncover(){
     cardImage = String(playersArray[playerTurn-1].hand[0].front);
     cardId = String("player" + playerTurn + "-card" + (playersArray[playerTurn-1].hand.length - 1));
     playersArray[playerTurn-1].hand[0].id = cardId;
+    playersArray[playerTurn-1].hand[0].playable = true
     playerContainer = String("player" + playerTurn + "-container");
     cardClass = String("player" + playerTurn + "-cards");
     newElement = document.createElement('img');
     newElement.setAttribute('src', cardImage);
     newElement.setAttribute('id', cardId);
     newElement.setAttribute('class', 'card-format');
+    newElement.addEventListener('click', function() {
+      cardPicked = this.id;
+      function pickId(card){
+        return card.id === cardPicked
+      }
+      playerChoice = playersArray[playerTurn - 1].hand.find(pickId);
+      play()
+    });
     playerContainer = document.getElementById(playerContainer);
     playerContainer.appendChild(newElement);
     newElement.classList.add(cardClass);
@@ -146,40 +158,6 @@ function uncover(){
       document.getElementById("deck-container").style.boxShadow = "none"
     }else if(deck.length === 0){
       document.getElementById("deck-container").remove()
-    }
-  }
-  selectCard()
-}
-
-
-//PLAY
-function play(){
-  if(playerChoice.playable != true){
-    alert(`You must choose a card from Player${playerTurn}'s hand`);
-    playerChoice = [];
-  }else if(playerChoice.playable === true && playerChoice.cardSuit != centerPile[0].cardSuit){
-    //alert("You must choose a card of the same suit")
-    playerChoice = [];
-  }else if(playerChoice.playable === true && playerChoice.cardSuit === centerPile[0].cardSuit){
-    playerChoice.playable = false;
-    centerPile.unshift(playerChoice);
-    playerChoice = [];
-    for(i = 0; i <= playersArray[playerTurn - 1].hand.length - 1; i++){
-        playersArray[playerTurn - 1].hand[i].playable = false;
-      }
-    if(playerTurn <= numberOfPlayers){
-      playerTurn += 1;
-      for(i = 0; i <= playersArray[playerTurn - 1].hand.length - 1; i++){
-        playersArray[playerTurn - 1].hand[i].playable = true;
-      }
-    }else{
-      playerTurn = 1;
-      for(i = 0; i <= playersArray[0].hand.length - 1; i++){
-        playersArray[playerTurn - 1].hand[i].playable = true;
-      }
-    }
-    for(i = 0; i < centerPile.length; i++){
-        centerPile[i].playable = false;
     }
   }
 }
@@ -201,15 +179,10 @@ function finishRound(){
 //finishRound()
 
 function game(){
-  createDeck(); //creates and shuffles the deck of cards (I'll have to assign to filenames later to link them with the visuals)
+  createDeck();
   createPlayers();
-  //console.log(playersArray[0].hand)
-  dealCards(); //this include the first card in the center of the table
+  dealCards();
   selectCard()
-  //console.log(playerChoice)
-  //play();
-  //player 2 choses card**********
-  //Scoring
 }
 game();
 

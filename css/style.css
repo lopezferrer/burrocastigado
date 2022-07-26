@@ -93,6 +93,10 @@ body {
   padding-bottom: 8px;
 }
 
+#center1{
+  visibility: visible;
+}
+
 #player2-container{
   top: 3%;
 }
@@ -105,8 +109,4 @@ body {
   width: 50%;
   left: 22.5%;
   height: 180px;
-}
-
-#center1{
-  visibility: visible;
 }
