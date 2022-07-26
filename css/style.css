@@ -48,13 +48,6 @@ body {
   margin-bottom: 2.5%;
 }
 
-.card-format{
-  background-color: white;
-  width: 120px;
-  height: 168px;
-  border-radius: 7px;
-}
-
 #deck-container{
   position: absolute;
   right: 4%;
@@ -91,6 +84,14 @@ body {
   gap: 0.5%;
   overflow: auto;
   padding-bottom: 8px;
+
+}
+.card-format{
+  background-color: white;
+  width: 120px;
+  height: 168px;
+  border-radius: 7px;
+  padding: 0px;
 }
 
 #center1{
