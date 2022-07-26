@@ -74,6 +74,7 @@ function dealCards(){
       newElement.setAttribute('id', cardId);
       newElement.setAttribute('class', 'card-format');
       newElement.classList.add(cardClass);
+      newElement.classList.add('player-hand');
       playerContainer = document.getElementById(playerContainer);
       playerContainer.appendChild(newElement);
     }
@@ -101,6 +102,7 @@ function dealCards(){
 //------PLAY LOGIC ------------------//
 function play() {
   if(playerChoice === undefined){
+    console.log(playerChoice)
     alert(`It is Player-${playerTurn}'s turn!\nYou must choose a card from Player-${playerTurn}'s hand.`)
     return
   }else if(centerPile.length === 0 || playerChoice.cardSuit === centerPile[0].cardSuit){
@@ -129,16 +131,42 @@ function play() {
       }
       playerTurn = 1;
       playersHand = playersArray[playerTurn-1].hand;
+      alert(`Pick your card, Player ${playerTurn}`)
       for(let i = 0; i <= playersHand.length - 1; i++){
         cardId = document.getElementById(playersHand[i].id);
         cardImageFile = String(playersHand[i].front);
-        cardId.style.cursor = "auto";
+        cardId.style.cursor = "grab";
         cardId.setAttribute('src', cardImageFile);
       }
       playerContainer = String("player" + playersArray[playerTurn - 1].playerNumber + "-container")
       document.getElementById(playerContainer).style.border = "6px solid black";
+
+      //document.getElementById(playerContainer).style.cursor = "grab";
     }else{
-      player +=1;
+      console.log(playerTurn)
+      playerContainer = String("player" + playersArray[playerTurn - 1].playerNumber + "-container")
+      document.getElementById(playerContainer).style.border = "2px solid black";
+      let playersHand = playersArray[playerTurn-1].hand;
+      for(let i = 0; i <= playersHand.length - 1; i++){
+        cardId = document.getElementById(playersHand[i].id);
+        cardImageFile = String(playersHand[i].rear);
+        cardId.style.cursor = "auto";
+        cardId.setAttribute('src', cardImageFile);
+      }
+      playerTurn +=1;
+      playersHand = playersArray[playerTurn-1].hand;
+      alert(`Pick your card, Player ${playerTurn}`)
+      for(let i = 0; i <= playersHand.length - 1; i++){
+        cardId = document.getElementById(playersHand[i].id);
+        cardImageFile = String(playersHand[i].front);
+        cardId.style.cursor = "grab";
+        cardId.setAttribute('src', cardImageFile);
+      }
+      console.log("player" + playerTurn + "-" + "cards")
+      let cards = document.querySelectorAll("." + "player" + (playerTurn-1) + "-" + "cards");
+      let cardPicked = "";
+      playerContainer = String("player" + playersArray[playerTurn - 1].playerNumber + "-container")
+      document.getElementById(playerContainer).style.border = "6px solid black";
     }
   }else if(centerPile.length >= 1 || playerChoice.cardSuit === centerPile[0].cardSuit){
     alert("You must choose a card of the same suit")
@@ -148,7 +176,7 @@ function play() {
 //------PICK CARD FROM HAND----------//
 function selectCard(){
   playerChoice = {}
-  let cards = document.querySelectorAll("." + "player" + playerTurn + "-" + "cards");
+  let cards = document.querySelectorAll("." + "player-hand");
   let cardPicked = "";
   for (i of cards) {
     i.addEventListener('click', function() {
@@ -190,6 +218,7 @@ function uncover(){
     playerContainer = document.getElementById(playerContainer);
     playerContainer.appendChild(newElement);
     newElement.classList.add(cardClass);
+    newElement.classList.add('player-hand');
     newElement.style.cursor = "grab";
     if(deck.length === 3){
       document.getElementById("deck-container").style.boxShadow = "2px 2px 0.5px #eee, 3px 3px 0.5px black,5px 5px 0.5px #eee,6px 6px 0.5px black";
