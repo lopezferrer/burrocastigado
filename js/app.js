@@ -121,15 +121,20 @@ function play() {
       playerContainer = String("player" + playersArray[playerTurn - 1].playerNumber + "-container")
       document.getElementById(playerContainer).style.border = "2px solid black";
       let playersHand = playersArray[playerTurn-1].hand;
-      console.log(playersHand)
       for(let i = 0; i <= playersHand.length - 1; i++){
         cardId = document.getElementById(playersHand[i].id);
-        console.log(cardId)
         cardImageFile = String(playersHand[i].rear);
         cardId.style.cursor = "auto";
         cardId.setAttribute('src', cardImageFile);
       }
       playerTurn = 1;
+      playersHand = playersArray[playerTurn-1].hand;
+      for(let i = 0; i <= playersHand.length - 1; i++){
+        cardId = document.getElementById(playersHand[i].id);
+        cardImageFile = String(playersHand[i].front);
+        cardId.style.cursor = "auto";
+        cardId.setAttribute('src', cardImageFile);
+      }
       playerContainer = String("player" + playersArray[playerTurn - 1].playerNumber + "-container")
       document.getElementById(playerContainer).style.border = "6px solid black";
     }else{
